@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Finance Manager - Register</title>
+    <link rel="stylesheet" href="register.css" id="register-theme-style">
+</head>
+<body id="register-body-container">
+
+<!-- Registeration Container Box --> 
+<div id="register-card-box" class="reg-card">
+  <h2 id="reg-form-title">Create Your Account</h2>
+  <p id="reg-form-subtitle">Join The Secure Indian Finance Manager</p>
+  
+<!-- Registeration Form With Manual Inputs (No Dropdowns) -->
+<form id="user-registration-form">
+
+<!-- Full Name -->
+<div id="input-group-name" class="input-field-box">
+   <label for="reg-fullname">Full Name</label>
+   <input type="text" id="ref-fullname" placeholder="Enter your full name" required> 
+</div> 
+
+<!-- Email Address -->
+<div id="input-group-email" class="input-field-box">
+   <label for="reg-email">Email Address</label>
+   <input type="email" id="reg-email" placeholder="Enter your email" autocomplete="email" required> 
+</div>
+
+<!-- Password -->
+ <div id="input-group-passowrd" class="input-filed-box">
+   <label for="reg-password">Password</label>
+   <input type="password" id="reg-password" placeholder="Create a secure password" autocomplete="new-password" required> 
+ </div>
+
+<!-- Manual State Input -->
+<div id="input-group-state" class="input-field-box">
+  <label for="reg-state">State</label>
+  <input type="text" id="reg-state" placeholder="e.g., Uttar Pardesh, Jharkhand, Uttrakhand..." required>  
+</div>
+
+<!-- Manual District Input-->
+<div id="input-group-district" class="input-field-box">
+  <label for="reg-district">District</label>
+  <input type="text" id="reg-district" placeholder="Enter your city or village" required>  
+</div>
+
+<!-- maual City / Village Input -->
+<div id="input-group-city" class="input-field-box">
+ <label for="reg-city">City / Village</label>
+ <input type="text" id="reg-city" placeholder="Enter Your city or village" required>    
+</div> 
+
+<!-- Profile Photo Upload -->
+<div id="input-group-photo" class="input-field-box">
+ <label for="reg-profile-photo">Profile Photo</label>
+ <input type="file" id="reg-profile-photo" accept="image/+">   
+</div> 
+
+               <!-- Submit Button -->
+      <button type="sumbit" id="reg-sumit-btn">Register Accounts</button>                
+
+</form>   
+</div>    
+
+
+<!-- Linking Independent Js File -->
+<script src="register.js"></script>
+
+</body>
+</html>
