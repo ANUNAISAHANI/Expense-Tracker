@@ -2,19 +2,21 @@
    INDIVIDUAL JS FOR REGISTER.HTML (NO MIXING)
    ========================================== */
 
-/**
- * Event listener to handle registration form submission securely.
- * It prevents default reload and prepares manual inputs for backend integration.
- */
-
 document.addEventListener("DOMContentLoaded", function () {
+    // Global Theme Check from localStorage
+    const targetBody = document.getElementById('register-body-container');
+    const savedTheme = localStorage.getItem('theme_preference');
+    if (savedTheme === 'dark') {
+        targetBody.classList.add('dark-mode-active');
+    }
+
     const regForm = document.getElementById("user-registration-form");
 
     if (regForm) {
         regForm.addEventListener("submit", function (event) {
-            event.preventDefault(); //Stop Page From Reloading
+            event.preventDefault(); // Stop Page From Reloading
 
-            //Gathering Manual Inputs AS Per User Rules
+            // Gathering Manual Inputs As Per User Rules
             const fullName = document.getElementById("reg-fullname").value;
             const email = document.getElementById("reg-email").value;
             const password = document.getElementById("reg-password").value;
@@ -23,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const city = document.getElementById("reg-city").value;
             const profilePhoto = document.getElementById("reg-profile-photo").files[0];
 
-            
             alert("Registration Form Validated Successfully! Backend Connection Pending.");
         });
     }

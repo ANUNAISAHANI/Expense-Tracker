@@ -55,15 +55,20 @@
 <!-- Profile Photo Upload -->
 <div id="input-group-photo" class="input-field-box">
  <label for="reg-profile-photo">Profile Photo</label>
- <input type="file" id="reg-profile-photo" accept="image/+">   
+ <input type="file" id="reg-profile-photo" accept="image/*">   
 </div> 
 
-               <!-- Submit Button -->
-      <button type="submit" id="reg-submit-btn">Register Accounts</button>                
+<!-- Submit Button -->
+<button type="submit" id="reg-submit-btn">Register Accounts</button>                
 
 </form>   
-</div>    
 
+<!-- Link To Login Page If User Already Has An Account -->
+<div id="login-redirect-box" class="redirect-text-box" style="margin-top: 25px; text-align: center; font-size: 13px; color: #86868b;">
+  <p>Already Have An Account ? <a href="login.html" id="to-login-link" style="color: #0066cc; text-decoration: none; font-weight: 600;">Login Here</a></p>
+</div>
+
+</div>    
 
 <!-- Linking Independent Js File -->
 <script src="register.js"></script>
