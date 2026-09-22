@@ -1,0 +1,192 @@
+/* ==========================================
+   INDIVIDUAL CSS FOR DASHBOARD.HTML (NO MIXING)
+   ========================================== */
+
+/* Default Light Mode Variables */
+:root {
+    --bg-color: #f5f5f7;
+    --text-color: #1d1d1f;
+    --header-bg: #ffffff;
+    --card-bg: #ffffff;
+    --border-color: #d2d2d7;
+    --btn-bg: #0066cc;
+    --btn-text: #ffffff;
+}
+
+body#dashboard-body-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header Styling */
+#dashboard-header {
+    padding: 20px 30px;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+#dash-logo-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#dash-flag-icon {
+    font-size: 26px;
+}
+
+#dash-app-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+
+#dash-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#theme-toggle-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#logout-link {
+    color: #ff3b30;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Main Content Layout */
+#dashboard-main-content {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.dash-card {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.dash-card h2 {
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* Metrics Grid */
+#summary-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.metric-box {
+    background-color: var(--bg-color);
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.metric-box span {
+    font-size: 13px;
+    color: #86868b;
+    font-weight: 600;
+}
+
+.metric-box h3 {
+    font-size: 24px;
+    margin: 8px 0 0 0;
+}
+
+/* Input Fields & Forms */
+.input-field-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 15px;
+}
+
+.input-field-box label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.input-field-box input,
+.input-field-box select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+#add-expense-btn {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+/* Tables */
+#expense-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#expense-list-table th, 
+#expense-list-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+}
+
+#expense-list-table th {
+    font-weight: 600;
+    color: #86868b;
+}
+
+/* Dark Mode Overrides */
+body.dark-mode-active {
+    --bg-color: #000000;
+    --text-color: #f5f5f7;
+    --header-bg: #1c1c1e;
+    --card-bg: #1c1c1e;
+    --border-color: #38383a;
+    --btn-bg: #0a84ff;
+}

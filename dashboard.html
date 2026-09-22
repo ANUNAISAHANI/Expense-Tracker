@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Finance Manager - Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" id="dashboard-theme-style">
+</head>
+<body id="dashboard-body-container">
+
+    <!-- Top Header / Navigation Bar with Profile DP Avatar & Modal Trigger -->
+    <header id="dashboard-header" class="header-light">
+        <div id="dash-logo-box">
+            <span id="dash-flag-icon">🇮🇳</span>
+            <h1 id="dash-app-title">INDIAN FINANCE MANAGER</h1>
+        </div>
+        
+        <div id="dash-header-actions" style="display: flex; align-items: center; gap: 15px;">
+            <div id="header-profile-btn" onclick="toggleProfileModal()" style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: var(--bg-color); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border-color);">
+                <img id="header-user-avatar" src="" alt="DP" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; display: none;">
+                <div id="header-default-avatar" style="width: 30px; height: 30px; border-radius: 50%; background-color: #0066cc; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px;">U</div>
+                <span id="header-username-display" style="font-size: 13px; font-weight: 600;">Profile</span>
+            </div>
+
+            <button id="theme-toggle-btn" onclick="toggleThemeMode()">🌙</button>
+            <a href="login.html" id="logout-link">Logout</a>
+        </div>
+    </header>
+
+    <!-- Profile Settings Modal -->
+    <div id="profile-settings-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="dash-card" style="max-width: 400px; width: 90%; position: relative; background: var(--card-bg);">
+            <button onclick="toggleProfileModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-color);">✕</button>
+            <h2>Profile Settings</h2>
+            <form id="profile-settings-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                <div class="input-field-box">
+                    <label for="settings-fullname">Full Name</label>
+                    <input type="text" id="settings-fullname" placeholder="Update your name">
+                </div>
+                <div class="input-field-box">
+                    <label for="settings-email">Email Address</label>
+                    <input type="email" id="settings-email" placeholder="Update your email">
+                </div>
+                <div class="input-field-box">
+                    <label for="settings-phone">Phone Number</label>
+                    <input type="tel" id="settings-phone" placeholder="Enter phone number">
+                </div>
+                <div class="input-field-box">
+                    <label for="settings-profile-photo">Profile Photo (DP)</label>
+                    <input type="file" id="settings-profile-photo" accept="image/*">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="button" id="save-profile-btn" style="background-color: #0066cc; color: #fff; border: none; padding: 10px 15px; border-radius: 20px; cursor: pointer; font-weight: 600;">Save</button>
+                    <button type="button" onclick="removeProfilePhoto()" style="background-color: #86868b; color: #fff; border: none; padding: 10px 15px; border-radius: 20px; cursor: pointer; font-weight: 600;">Remove DP</button>
+                </div>
+            </form>
+            <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px; display: flex; justify-content: space-between;">
+                <button onclick="clearAllUserData()" style="background-color: #ff3b30; color: #fff; border: none; padding: 8px 14px; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: 600;">Reset / Delete Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <main id="dashboard-main-content">
+
+        <!-- Section Navigation Tabs -->
+        <div id="dashboard-tab-nav" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button id="tab-btn-financial" onclick="switchDashboardTab('financial')" style="padding: 10px 20px; border-radius: 20px; border: none; background: var(--btn-bg); color: var(--btn-text); font-weight: 600; cursor: pointer;">Financial Overview</button>
+            <button id="tab-btn-regional" onclick="switchDashboardTab('regional')" style="padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); font-weight: 600; cursor: pointer;">All-India Regional Insights</button>
+        </div>
+
+        <!-- TAB 1: Financial Overview Panel -->
+        <div id="panel-financial-overview" class="dashboard-tab-panel">
+            <section class="dash-card">
+                <h2>Financial Overview & Analytics</h2>
+                <div id="income-input-box" class="input-field-box" style="margin-bottom: 20px;">
+                    <label for="user-income-input">Your Income / Funds (Optional)</label>
+                    <input type="number" id="user-income-input" placeholder="Enter amount (e.g., 500, 1000)">
+                </div>
+                <div id="summary-metrics-grid">
+                    <div class="metric-box">
+                        <span>Total Balance</span>
+                        <h3 id="display-total-balance">₹0.00</h3>
+                    </div>
+                    <div class="metric-box">
+                        <span>Total Spent</span>
+                        <h3 id="display-total-spent">₹0.00</h3>
+                    </div>
+                    <div class="metric-box">
+                        <span>Total Tax Paid</span>
+                        <h3 id="display-total-tax">₹0.00</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Itemized Expense & Final Submit -->
+            <section class="dash-card" style="margin-top: 25px;">
+                <h2>Add Itemized Expense & Calculate Tax</h2>
+                <form id="expense-item-form">
+                    <div class="input-field-box">
+                        <label for="item-name">Item / Expense Name</label>
+                        <input type="text" id="item-name" placeholder="e.g., Kurkure, Laptop..." required>
+                    </div>
+                    <div class="input-field-box">
+                        <label for="item-price">Item Price (₹)</label>
+                        <input type="number" id="item-price" placeholder="Enter price" required>
+                    </div>
+                    <div class="input-field-box">
+                        <label for="item-expense-date">Select Date & Time</label>
+                        <input type="date" id="item-expense-date" required style="padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
+                    </div>
+                    <button type="submit" id="add-expense-btn">Add to Draft</button>
+                </form>
+
+                <div id="expense-table-container" style="margin-top: 25px;">
+                    <h3>Draft Records (Ready for Final Submit)</h3>
+                    <table id="expense-list-table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Price</th>
+                                <th>Tax</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expense-table-body"></tbody>
+                    </table>
+                    <button id="final-submit-records-btn" onclick="performFinalSubmit()" style="margin-top: 15px; background-color: #28a745; color: #fff; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 600; cursor: pointer;">Final Submit & Lock Records</button>
+                </div>
+            </section>
+
+            <!-- Finalized Data Table & Graph Side-by-Side with Calendar Filter Added -->
+            <section class="dash-card" style="margin-top: 25px;">
+                <h2>Finalized Records & Visual Analytics</h2>
+                
+                <!-- Calendar Date Filter added here as requested -->
+                <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <label for="financial-calendar-filter" style="font-size: 13px; font-weight: 600;">Filter by Date:</label>
+                    <input type="date" id="financial-calendar-filter" onchange="filterFinancialRecordsByDate()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
+                    <button onclick="resetFinancialDateFilter()" style="background: #555; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px;">Show All</button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; margin-top: 15px;">
+                    
+                    <!-- Left: Saved Data Table -->
+                    <div style="background: var(--bg-color); padding: 15px; border-radius: 14px;">
+                        <h4 style="margin-top: 0;">Saved Transactions</h4>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 13px;" id="finalized-data-table">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+                                        <th style="padding: 6px;">Item</th>
+                                        <th style="padding: 6px;">Price</th>
+                                        <th style="padding: 6px;">Tax</th>
+                                        <th style="padding: 6px;">Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="finalized-table-body">
+                                    <tr><td colspan="4" style="padding: 10px; color: #86868b;">No finalized records yet</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right: Bar Chart -->
+                    <div class="chart-box" style="background: var(--bg-color); padding: 15px; border-radius: 14px; text-align: center;">
+                        <h4 style="margin-top: 0;">Expense vs Tax Bar Chart</h4>
+                        <div id="financial-bar-chart-view" style="height: 140px; display: flex; align-items: flex-end; justify-content: center; gap: 20px; padding-top: 15px; border-bottom: 2px solid var(--border-color);">
+                            <span style="font-size: 13px; color: #86868b;">No data to display</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: All-India Regional Insights Panel -->
+        <div id="panel-regional-insights" class="dashboard-tab-panel" style="display: none;">
+            <section class="dash-card">
+                <h2>All-India Regional Tax Insights (Anonymous)</h2>
+                <div id="region-dropdowns-box" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div class="input-field-box">
+                        <label for="filter-state">State</label>
+                        <select id="filter-state"><option value="">Select State</option></select>
+                    </div>
+                    <div class="input-field-box">
+                        <label for="filter-district">District</label>
+                        <select id="filter-district"><option value="">Select District</option></select>
+                    </div>
+                    <div class="input-field-box">
+                        <label for="filter-city">City / Village</label>
+                        <select id="filter-city"><option value="">Select City / Village</option></select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; gap: 15px; align-items: center;">
+                    <label for="regional-calendar-filter" style="font-size: 13px; font-weight: 600;">Filter Date:</label>
+                    <input type="date" id="regional-calendar-filter" onchange="updateRegionalInsights()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
+                </div>
+
+                <div id="regional-stats-box" style="margin-top: 20px; background: var(--bg-color); padding: 20px; border-radius: 14px;">
+                    <p style="font-size: 15px; font-weight: 600;">Regional Total Spending: <span id="reg-total-spending">₹0.00</span></p>
+                    <p style="font-size: 15px; font-weight: 600;">Regional Tax Contributed: <span id="reg-total-tax">₹0.00</span></p>
+                </div>
+            </section>
+
+            <section class="dash-card" style="margin-top: 25px;">
+                <h2>Regional Data & Visual Analytics</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; margin-top: 15px;">
+                    <div style="background: var(--bg-color); padding: 15px; border-radius: 14px;">
+                        <h4 style="margin-top: 0;">Regional Transactions</h4>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 13px;" id="regional-data-table">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+                                        <th style="padding: 6px;">Item</th>
+                                        <th style="padding: 6px;">Price</th>
+                                        <th style="padding: 6px;">Tax</th>
+                                        <th style="padding: 6px;">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="regional-table-body">
+                                    <tr><td colspan="4" style="padding: 10px; color: #86868b;">No records for this region</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="chart-box" style="background: var(--bg-color); padding: 15px; border-radius: 14px; text-align: center;">
+                        <h4 style="margin-top: 0;">Regional Tax Contribution Chart</h4>
+                        <div id="regional-chart-view" style="height: 140px; display: flex; align-items: flex-end; justify-content: center; gap: 20px; padding-top: 15px; border-bottom: 2px solid var(--border-color);">
+                            <span style="font-size: 13px; color: #86868b;">No data to display</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
