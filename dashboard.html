@@ -73,10 +73,18 @@
         <div id="panel-financial-overview" class="dashboard-tab-panel">
             <section class="dash-card">
                 <h2>Financial Overview & Analytics</h2>
-                <div id="income-input-box" class="input-field-box" style="margin-bottom: 20px;">
+                <div id="income-input-box" class="input-field-box" style="margin-bottom: 15px;">
                     <label for="user-income-input">Your Income / Funds (Optional)</label>
                     <input type="number" id="user-income-input" placeholder="Enter amount (e.g., 500, 1000)">
                 </div>
+
+                <!-- Month Selector & Reset Option added here -->
+                <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <label for="financial-month-selector" style="font-size: 13px; font-weight: 600;">Monthly Filter / Reset:</label>
+                    <input type="month" id="financial-month-selector" onchange="filterFinancialByMonth()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
+                    <button onclick="resetMonthlyData()" style="background: #ff3b30; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;">Reset Month Data</button>
+                </div>
+
                 <div id="summary-metrics-grid">
                     <div class="metric-box">
                         <span>Total Balance</span>
@@ -130,11 +138,10 @@
                 </div>
             </section>
 
-            <!-- Finalized Data Table & Graph Side-by-Side with Calendar Filter Added -->
+            <!-- Finalized Data Table & Graph Side-by-Side with Calendar Filter -->
             <section class="dash-card" style="margin-top: 25px;">
                 <h2>Finalized Records & Visual Analytics</h2>
                 
-                <!-- Calendar Date Filter added here as requested -->
                 <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                     <label for="financial-calendar-filter" style="font-size: 13px; font-weight: 600;">Filter by Date:</label>
                     <input type="date" id="financial-calendar-filter" onchange="filterFinancialRecordsByDate()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
@@ -143,7 +150,6 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; margin-top: 15px;">
                     
-                    <!-- Left: Saved Data Table -->
                     <div style="background: var(--bg-color); padding: 15px; border-radius: 14px;">
                         <h4 style="margin-top: 0;">Saved Transactions</h4>
                         <div style="max-height: 200px; overflow-y: auto;">
@@ -163,7 +169,6 @@
                         </div>
                     </div>
 
-                    <!-- Right: Bar Chart -->
                     <div class="chart-box" style="background: var(--bg-color); padding: 15px; border-radius: 14px; text-align: center;">
                         <h4 style="margin-top: 0;">Expense vs Tax Bar Chart</h4>
                         <div id="financial-bar-chart-view" style="height: 140px; display: flex; align-items: flex-end; justify-content: center; gap: 20px; padding-top: 15px; border-bottom: 2px solid var(--border-color);">
@@ -197,6 +202,7 @@
                 <div style="margin-top: 20px; display: flex; gap: 15px; align-items: center;">
                     <label for="regional-calendar-filter" style="font-size: 13px; font-weight: 600;">Filter Date:</label>
                     <input type="date" id="regional-calendar-filter" onchange="updateRegionalInsights()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
+                    <button onclick="resetRegionalDateFilter()" style="background: #555; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px;">Show All</button>
                 </div>
 
                 <div id="regional-stats-box" style="margin-top: 20px; background: var(--bg-color); padding: 20px; border-radius: 14px;">
@@ -221,7 +227,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="regional-table-body">
-                                    <tr><td colspan="4" style="padding: 10px; color: #86868b;">No records for this region</td></tr>
+                                    <tr><td colspan="4" style="padding: 10px; color: #86868b;">No records found</td></tr>
                                 </tbody>
                             </table>
                         </div>

@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (incomeInput) {
         incomeInput.addEventListener("input", function () {
             userIncome = parseFloat(incomeInput.value) || 0;
-            updateDashboardMetrics();
+            updateDashboardMetrics(finalizedRecords);
         });
     }
 
@@ -83,6 +83,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    // Initialize regional view with all records
+    updateRegionalInsights();
 });
 
 function toggleProfileModal() {
@@ -112,6 +115,7 @@ function switchDashboardTab(tabName) {
         regBtn.style.color = "var(--btn-text)";
         finBtn.style.background = "var(--card-bg)";
         finBtn.style.color = "var(--text-color)";
+        updateRegionalInsights();
     }
 }
 
@@ -162,7 +166,7 @@ function performFinalSubmit() {
 
     draftExpenses = [];
     renderDraftTable();
-    updateDashboardMetrics();
+    updateDashboardMetrics(finalizedRecords);
     renderFinalizedDataTable(finalizedRecords);
     renderFinancialCharts(finalizedRecords);
     updateRegionalInsights();
@@ -170,11 +174,11 @@ function performFinalSubmit() {
     alert("Records Final Submitted & Locked successfully!");
 }
 
-function updateDashboardMetrics() {
+function updateDashboardMetrics(recordsToCalc) {
     let totalSpent = 0;
     let totalTax = 0;
 
-    finalizedRecords.forEach(item => {
+    recordsToCalc.forEach(item => {
         totalSpent += item.price;
         totalTax += item.tax;
     });
@@ -216,12 +220,44 @@ function filterFinancialRecordsByDate() {
     const filtered = finalizedRecords.filter(item => item.date === selectedDate);
     renderFinalizedDataTable(filtered);
     renderFinancialCharts(filtered);
+    updateDashboardMetrics(filtered);
 }
 
 function resetFinancialDateFilter() {
     document.getElementById("financial-calendar-filter").value = "";
+    document.getElementById("financial-month-selector").value = "";
     renderFinalizedDataTable(finalizedRecords);
     renderFinancialCharts(finalizedRecords);
+    updateDashboardMetrics(finalizedRecords);
+}
+
+// Filter Financial Records by Month & Reset Month Data
+function filterFinancialByMonth() {
+    const selectedMonth = document.getElementById("financial-month-selector").value; // Format: YYYY-MM
+    if (!selectedMonth) return;
+
+    const filtered = finalizedRecords.filter(item => item.date.startsWith(selectedMonth));
+    renderFinalizedDataTable(filtered);
+    renderFinancialCharts(filtered);
+    updateDashboardMetrics(filtered);
+}
+
+function resetMonthlyData() {
+    const selectedMonth = document.getElementById("financial-month-selector").value;
+    if (!selectedMonth) {
+        alert("Please select a month first to reset its data!");
+        return;
+    }
+
+    if (confirm("Are you sure you want to reset/remove records for the selected month?")) {
+        finalizedRecords = finalizedRecords.filter(item => !item.date.startsWith(selectedMonth));
+        document.getElementById("financial-month-selector").value = "";
+        renderFinalizedDataTable(finalizedRecords);
+        renderFinancialCharts(finalizedRecords);
+        updateDashboardMetrics(finalizedRecords);
+        updateRegionalInsights();
+        alert("Monthly data reset successfully!");
+    }
 }
 
 function renderFinancialCharts(recordsToUse) {
@@ -248,20 +284,29 @@ function renderFinancialCharts(recordsToUse) {
     `;
 }
 
+// Fixed Regional Insights Date Filtering & Table/Chart Update
 function updateRegionalInsights() {
-    let totalSpent = finalizedRecords.reduce((sum, i) => sum + i.price, 0);
-    let totalTax = finalizedRecords.reduce((sum, i) => sum + i.tax, 0);
+    const selectedDate = document.getElementById("regional-calendar-filter") ? document.getElementById("regional-calendar-filter").value : "";
+    
+    // Filter records by selected date if provided, otherwise use all
+    let regionalRecords = finalizedRecords;
+    if (selectedDate) {
+        regionalRecords = finalizedRecords.filter(item => item.date === selectedDate);
+    }
+
+    let totalSpent = regionalRecords.reduce((sum, i) => sum + i.price, 0);
+    let totalTax = regionalRecords.reduce((sum, i) => sum + i.tax, 0);
 
     document.getElementById("reg-total-spending").innerText = `₹${totalSpent.toFixed(2)}`;
     document.getElementById("reg-total-tax").innerText = `₹${totalTax.toFixed(2)}`;
 
     const regTbody = document.getElementById("regional-table-body");
     if (regTbody) {
-        if (finalizedRecords.length === 0) {
-            regTbody.innerHTML = `<tr><td colspan="4" style="padding: 10px; color: #86868b;">No records for this region</td></tr>`;
+        if (regionalRecords.length === 0) {
+            regTbody.innerHTML = `<tr><td colspan="4" style="padding: 10px; color: #86868b;">No records found for this date</td></tr>`;
         } else {
             regTbody.innerHTML = "";
-            finalizedRecords.forEach(item => {
+            regionalRecords.forEach(item => {
                 const row = document.createElement("tr");
                 row.style.borderBottom = "1px solid var(--border-color)";
                 row.innerHTML = `
@@ -277,7 +322,7 @@ function updateRegionalInsights() {
 
     const regChartView = document.getElementById("regional-chart-view");
     if (regChartView) {
-        if (finalizedRecords.length === 0) {
+        if (regionalRecords.length === 0) {
             regChartView.innerHTML = `<span style="font-size: 13px; color: #86868b;">No data to display</span>`;
         } else {
             regChartView.innerHTML = `
@@ -288,6 +333,13 @@ function updateRegionalInsights() {
             `;
         }
     }
+}
+
+function resetRegionalDateFilter() {
+    if (document.getElementById("regional-calendar-filter")) {
+        document.getElementById("regional-calendar-filter").value = "";
+    }
+    updateRegionalInsights();
 }
 
 function loadUserProfileAndRegions() {
@@ -336,7 +388,7 @@ function clearAllUserData() {
         finalizedRecords = [];
         localStorage.clear();
         renderDraftTable();
-        updateDashboardMetrics();
+        updateDashboardMetrics([]);
         renderFinalizedDataTable([]);
         renderFinancialCharts([]);
         updateRegionalInsights();
