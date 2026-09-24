@@ -5,6 +5,7 @@
 let draftExpenses = [];
 let finalizedRecords = [];
 let userIncome = 0;
+let metricResetActive = false; // Flag for fresh start metrics reset without deleting main records
 
 document.addEventListener("DOMContentLoaded", function () {
     const targetBody = document.getElementById('dashboard-body-container');
@@ -84,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Initialize regional view with all records
     updateRegionalInsights();
 });
 
@@ -165,6 +165,7 @@ function performFinalSubmit() {
     });
 
     draftExpenses = [];
+    metricResetActive = false; // New submit lifts the temporary reset view
     renderDraftTable();
     updateDashboardMetrics(finalizedRecords);
     renderFinalizedDataTable(finalizedRecords);
@@ -175,6 +176,13 @@ function performFinalSubmit() {
 }
 
 function updateDashboardMetrics(recordsToCalc) {
+    if (metricResetActive) {
+        document.getElementById("display-total-balance").innerText = `₹${userIncome.toFixed(2)}`;
+        document.getElementById("display-total-spent").innerText = `₹0.00`;
+        document.getElementById("display-total-tax").innerText = `₹0.00`;
+        return;
+    }
+
     let totalSpent = 0;
     let totalTax = 0;
 
@@ -217,7 +225,8 @@ function filterFinancialRecordsByDate() {
     const selectedDate = document.getElementById("financial-calendar-filter").value;
     if (!selectedDate) return;
 
-    const filtered = finalizedRecords.filter(item => item.date === selectedDate);
+    metricResetActive = false;
+    const filtered = finalizedRecords.filter(item => item.date === selectedDate || item.date.startsWith(selectedDate));
     renderFinalizedDataTable(filtered);
     renderFinancialCharts(filtered);
     updateDashboardMetrics(filtered);
@@ -226,45 +235,38 @@ function filterFinancialRecordsByDate() {
 function resetFinancialDateFilter() {
     document.getElementById("financial-calendar-filter").value = "";
     document.getElementById("financial-month-selector").value = "";
+    metricResetActive = false;
     renderFinalizedDataTable(finalizedRecords);
     renderFinancialCharts(finalizedRecords);
     updateDashboardMetrics(finalizedRecords);
 }
 
-// Filter Financial Records by Month & Reset Month Data
+// Filter Financial Records by Month / Year
 function filterFinancialByMonth() {
     const selectedMonth = document.getElementById("financial-month-selector").value; // Format: YYYY-MM
     if (!selectedMonth) return;
 
+    metricResetActive = false;
     const filtered = finalizedRecords.filter(item => item.date.startsWith(selectedMonth));
     renderFinalizedDataTable(filtered);
     renderFinancialCharts(filtered);
     updateDashboardMetrics(filtered);
 }
 
-function resetMonthlyData() {
-    const selectedMonth = document.getElementById("financial-month-selector").value;
-    if (!selectedMonth) {
-        alert("Please select a month first to reset its data!");
-        return;
-    }
-
-    if (confirm("Are you sure you want to reset/remove records for the selected month?")) {
-        finalizedRecords = finalizedRecords.filter(item => !item.date.startsWith(selectedMonth));
-        document.getElementById("financial-month-selector").value = "";
-        renderFinalizedDataTable(finalizedRecords);
-        renderFinancialCharts(finalizedRecords);
-        updateDashboardMetrics(finalizedRecords);
-        updateRegionalInsights();
-        alert("Monthly data reset successfully!");
-    }
+// Fresh Start Reset Metrics only (Does NOT delete main stored finalizedRecords data)
+function resetMonthlyMetricsOnly() {
+    metricResetActive = true;
+    renderFinalizedDataTable(finalizedRecords);
+    renderFinancialCharts(finalizedRecords);
+    updateDashboardMetrics(finalizedRecords);
+    alert("Financial metrics refreshed for a fresh start! Stored records remain safe.");
 }
 
 function renderFinancialCharts(recordsToUse) {
     const chartView = document.getElementById("financial-bar-chart-view");
     if (!chartView) return;
 
-    if (!recordsToUse || recordsToUse.length === 0) {
+    if (metricResetActive || !recordsToUse || recordsToUse.length === 0) {
         chartView.innerHTML = `<span style="font-size: 13px; color: #86868b;">No data to display</span>`;
         return;
     }
@@ -284,14 +286,16 @@ function renderFinancialCharts(recordsToUse) {
     `;
 }
 
-// Fixed Regional Insights Date Filtering & Table/Chart Update
+// Regional Insights with Day, Month, Year Filter support (No Reset button)
 function updateRegionalInsights() {
     const selectedDate = document.getElementById("regional-calendar-filter") ? document.getElementById("regional-calendar-filter").value : "";
+    const selectedMonth = document.getElementById("regional-month-filter") ? document.getElementById("regional-month-filter").value : "";
     
-    // Filter records by selected date if provided, otherwise use all
     let regionalRecords = finalizedRecords;
     if (selectedDate) {
-        regionalRecords = finalizedRecords.filter(item => item.date === selectedDate);
+        regionalRecords = regionalRecords.filter(item => item.date === selectedDate || item.date.startsWith(selectedDate));
+    } else if (selectedMonth) {
+        regionalRecords = regionalRecords.filter(item => item.date.startsWith(selectedMonth));
     }
 
     let totalSpent = regionalRecords.reduce((sum, i) => sum + i.price, 0);
@@ -303,7 +307,7 @@ function updateRegionalInsights() {
     const regTbody = document.getElementById("regional-table-body");
     if (regTbody) {
         if (regionalRecords.length === 0) {
-            regTbody.innerHTML = `<tr><td colspan="4" style="padding: 10px; color: #86868b;">No records found for this date</td></tr>`;
+            regTbody.innerHTML = `<tr><td colspan="4" style="padding: 10px; color: #86868b;">No records found</td></tr>`;
         } else {
             regTbody.innerHTML = "";
             regionalRecords.forEach(item => {
@@ -338,6 +342,9 @@ function updateRegionalInsights() {
 function resetRegionalDateFilter() {
     if (document.getElementById("regional-calendar-filter")) {
         document.getElementById("regional-calendar-filter").value = "";
+    }
+    if (document.getElementById("regional-month-filter")) {
+        document.getElementById("regional-month-filter").value = "";
     }
     updateRegionalInsights();
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Finance Manager - Login</title>
-    <link rel="stylesheet" href="login.css" id="login-theme-style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" id="login-theme-style">
 </head>
 <body id="login-body-container">
 
@@ -35,13 +35,13 @@
 
 <!-- Link To Register Page If User Doesn't Have An Account -->
 <div id="register-redirect-box" class="redirect-text-box">
-  <p>Don't have An Account ? <a href="register.html" id="to-register-link">Register Here</a></p>
+  <p>Don't have An Account ? <a href="/register" id="to-register-link">Register Here</a></p>
 </div>
 
 </div> 
 
 <!-- Linking Independent Js Files For Login -->
-<script src="login.js"></script> 
+<script src="{{ url_for('static', filename='login.js') }}"></script>
     
 </body>
 </html>

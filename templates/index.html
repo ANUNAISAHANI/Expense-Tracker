@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Finance Manager - Home</title>
     <!-- Linking independent CSS file -->
-    <link rel="stylesheet" href="style.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" id="theme-stylesheet">
 </head>
 <body id="main-body-container">
 
@@ -22,8 +22,8 @@
 
         <!-- Navigation Links to Login and Register Pages -->
         <div id="nav-links-box" style="margin-top: 15px;">
-            <a href="login.html" style="margin-right: 15px; color: #0066cc; text-decoration: none; font-weight: 600; font-size: 14px;">Login</a>
-            <a href="register.html" style="color: #0066cc; text-decoration: none; font-weight: 600; font-size: 14px;">Register</a>
+            <a href="/login" style="margin-right: 15px; color: #0066cc; text-decoration: none; font-weight: 600; font-size: 14px;">Login</a>
+            <a href="/register" style="color: #0066cc; text-decoration: none; font-weight: 600; font-size: 14px;">Register</a>
         </div>
     </header>
 
@@ -36,6 +36,6 @@
     </main>
 
     <!-- Linking independent JS file -->
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

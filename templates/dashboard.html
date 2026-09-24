@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Finance Manager - Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css" id="dashboard-theme-style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}" id="dashboard-theme-style">
 </head>
 <body id="dashboard-body-container">
 
@@ -78,11 +78,11 @@
                     <input type="number" id="user-income-input" placeholder="Enter amount (e.g., 500, 1000)">
                 </div>
 
-                <!-- Month Selector & Reset Option added here -->
+                <!-- Month & Year Selector & Fresh Start Reset Option -->
                 <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                    <label for="financial-month-selector" style="font-size: 13px; font-weight: 600;">Monthly Filter / Reset:</label>
+                    <label for="financial-month-selector" style="font-size: 13px; font-weight: 600;">Monthly / Yearly Filter:</label>
                     <input type="month" id="financial-month-selector" onchange="filterFinancialByMonth()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
-                    <button onclick="resetMonthlyData()" style="background: #ff3b30; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;">Reset Month Data</button>
+                    <button onclick="resetMonthlyMetricsOnly()" style="background: #ff3b30; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;">Fresh Start (Reset Metrics)</button>
                 </div>
 
                 <div id="summary-metrics-grid">
@@ -143,7 +143,7 @@
                 <h2>Finalized Records & Visual Analytics</h2>
                 
                 <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <label for="financial-calendar-filter" style="font-size: 13px; font-weight: 600;">Filter by Date:</label>
+                    <label for="financial-calendar-filter" style="font-size: 13px; font-weight: 600;">Filter by Date (Day/Month/Year):</label>
                     <input type="date" id="financial-calendar-filter" onchange="filterFinancialRecordsByDate()" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
                     <button onclick="resetFinancialDateFilter()" style="background: #555; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px;">Show All</button>
                 </div>
@@ -199,9 +199,14 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 20px; display: flex; gap: 15px; align-items: center;">
-                    <label for="regional-calendar-filter" style="font-size: 13px; font-weight: 600;">Filter Date:</label>
+                <!-- Regional Filter supporting Day, Month, or Year selection via input type="date" or custom month/year -->
+                <div style="margin-top: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <label for="regional-calendar-filter" style="font-size: 13px; font-weight: 600;">Filter Date (Day/Month/Year):</label>
                     <input type="date" id="regional-calendar-filter" onchange="updateRegionalInsights()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
+                    
+                    <label for="regional-month-filter" style="font-size: 13px; font-weight: 600;">Or Month:</label>
+                    <input type="month" id="regional-month-filter" onchange="updateRegionalInsights()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); color-scheme: dark light;">
+
                     <button onclick="resetRegionalDateFilter()" style="background: #555; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px;">Show All</button>
                 </div>
 
@@ -245,6 +250,6 @@
 
     </main>
 
-    <script src="dashboard.js"></script>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 </body>
 </html>

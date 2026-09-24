@@ -23,10 +23,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            const loginData = {
+           const loginData = {
                 email: email,
                 password: password
             };
+
+            window.location.href = "dashboard.html";
 
             loginForm.reset();
         });

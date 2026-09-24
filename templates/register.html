@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Finance Manager - Register</title>
-    <link rel="stylesheet" href="register.css" id="register-theme-style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}" id="register-theme-style">
 </head>
 <body id="register-body-container">
 
@@ -65,13 +65,13 @@
 
 <!-- Link To Login Page If User Already Has An Account -->
 <div id="login-redirect-box" class="redirect-text-box" style="margin-top: 25px; text-align: center; font-size: 13px; color: #86868b;">
-  <p>Already Have An Account ? <a href="login.html" id="to-login-link" style="color: #0066cc; text-decoration: none; font-weight: 600;">Login Here</a></p>
+  <p>Already Have An Account ? <a href="/login" id="to-login-link" style="color: #0066cc; text-decoration: none; font-weight: 600;">Login Here</a></p>
 </div>
 
 </div>    
 
 <!-- Linking Independent Js File -->
-<script src="register.js"></script>
+<script src="{{ url_for('static', filename='register.js') }}"></script>
 
 </body>
 </html>
