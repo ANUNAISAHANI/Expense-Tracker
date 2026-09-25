@@ -3,7 +3,6 @@
    ========================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Global Theme Check from localStorage
     const targetBody = document.getElementById('login-body-container');
     const savedTheme = localStorage.getItem('theme_preference');
     if (savedTheme === 'dark') {
@@ -23,14 +22,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-           const loginData = {
+            const loginData = {
                 email: email,
                 password: password
             };
 
-            window.location.href = "dashboard.html";
-
-            loginForm.reset();
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('user_name', data.user.fullName);
+                    localStorage.setItem('user_email', data.user.email);
+                    localStorage.setItem('reg_state', data.user.state || "");
+                    localStorage.setItem('reg_district', data.user.district || "");
+                    localStorage.setItem('reg_city', data.user.city || "");
+                    
+                    window.location.href = "/dashboard";
+                } else {
+                    alert(data.message || "Invalid email or password!");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Something went wrong during login.");
+            });
         });
     }
 });
